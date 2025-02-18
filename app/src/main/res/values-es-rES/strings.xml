@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">PracticaAndroid1</string>
+    <string name="dragonball_app">App de Dragon Ball</string>
+    <string name="insert_user">Introduce usuario</string>
+    <string name="insert_password">Introduce contraseña</string>
+    <string name="login">Inicio de sesión</string>
+</resources>

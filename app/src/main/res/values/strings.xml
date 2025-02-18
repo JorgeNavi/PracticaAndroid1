@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">PracticaAndroid1</string>
+    <string name="dragonball_app">DragonBall App</string>
+    <string name="insert_user">Insert user</string>
+    <string name="insert_password">insert password</string>
+    <string name="login">login</string>
 </resources>
