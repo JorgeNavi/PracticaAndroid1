@@ -4,4 +4,5 @@
     <string name="insert_user">Insert user</string>
     <string name="insert_password">insert password</string>
     <string name="login">login</string>
+    <string name="remember_user">remember me</string>
 </resources>
