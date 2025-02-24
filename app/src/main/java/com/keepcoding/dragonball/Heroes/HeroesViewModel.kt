@@ -9,6 +9,8 @@ import kotlinx.coroutines.flow.asStateFlow
 
 class HeroesViewModel: ViewModel()  {
 
+    private var token = ""
+
     sealed class State {
         data object Loading: State()
         data class Success(val heroes: List<Hero>): State()
@@ -18,6 +20,10 @@ class HeroesViewModel: ViewModel()  {
 
     private val _uiState = MutableStateFlow<State>(State.Loading)
     val uiState: StateFlow<State> = _uiState
+
+    fun updateToken(token: String) {
+        this.token = token
+    }
 
     //funcion de descargar personajes desde la API:
     fun getHeroes() {

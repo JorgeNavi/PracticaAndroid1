@@ -40,19 +40,20 @@ class HeroAdapter(
 
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HeroViewHolder {
+
+    override fun getItemCount(): Int {
+        return heroes.size //el tamaño de la lista es el tamaño de los personajes
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HeroViewHolder { //este metodo devuelve viewHolder (cada una de las casillas de la lista
         return HeroViewHolder(
             binding = ActivitySinglecharacterBinding.inflate(LayoutInflater.from(parent.context), parent, false),
             onHeroClicked = onHeroClicked,
         )
     }
 
-    override fun getItemCount(): Int {
-        return heroes.size //el tamaño de la lista es el tamaño de los personajes
-    }
-
-    override fun onBindViewHolder(holder: HeroViewHolder, position: Int) {
-        holder.bind(heroes[position])
+    override fun onBindViewHolder(holder: HeroViewHolder, position: Int) { //nos llega la vista (el viewHolder creado, y la posicion
+        holder.bind(heroes[position]) //es como decirle "al elemento posicion 1, los vas a rellenar con el hero 1" mas o menos
     }
 
 

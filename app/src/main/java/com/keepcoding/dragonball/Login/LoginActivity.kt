@@ -8,6 +8,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
+import com.keepcoding.dragonball.Heroes.HeroesActivity
 import com.keepcoding.dragonball.R
 import com.keepcoding.dragonball.databinding.ActivityLoginBinding
 import kotlinx.coroutines.launch
@@ -17,6 +18,7 @@ class LoginActivity : AppCompatActivity() {
     private val viewModel : LoginViewModel by viewModels() //hemos creado la clase loginViewModel y la instanciamos aqui
     //Aqui ponemos el binding cuyo tipo equivale al activity_login.xml. Es como conectar este fichero con el xml correspondiente
     private lateinit var binding : ActivityLoginBinding ///by viewBinding(ActivityLoginBinding::inflate) //para acceder a los elementos de la vista
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState) //es lo primero que se ejecuta en el ciclo de vida de la activity (la pantalla)
@@ -52,7 +54,8 @@ class LoginActivity : AppCompatActivity() {
                         binding.pbLoading.visibility = View.VISIBLE //mostramos el loading (el progressbar del xml)
                     }
                     is LoginViewModel.State.Success -> { //si esta en success:
-                        // TODO ir a la siguiente pantalla
+                        //pasamos a la siguiente pantalla con el metodo creado:
+                        runHeroesActivity(state.token)
                         binding.pbLoading.visibility = View.INVISIBLE //escondemos el loading (el progressbar del xml)
                         Toast.makeText(this@LoginActivity, "El token es. ${state.token}", Toast.LENGTH_LONG).show() //mostramos el token
 
@@ -65,5 +68,9 @@ class LoginActivity : AppCompatActivity() {
 
             }
         }
+    }
+
+    private fun runHeroesActivity(token: String) { //el token del login es el que nos va a llevar a la siguiente pantalla
+        HeroesActivity.runHeroesActivity(this, token) //intent lo gestiona android, le estas diciendo que desde context, quieres ir a HeroesActivity)
     }
 }
