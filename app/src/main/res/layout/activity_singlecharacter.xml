@@ -8,7 +8,6 @@
     android:orientation="horizontal"
     android:gravity="center_vertical"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:background="@color/orangetrans"
     >
 
     <ImageView
@@ -22,7 +21,7 @@
         android:id="@+id/tvName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text="Hello World!"
+        tools:text="Hero name"
         android:textSize="18sp"
         />
 

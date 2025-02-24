@@ -1,5 +1,7 @@
 package com.keepcoding.dragonball.Heroes
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -15,6 +17,17 @@ import kotlinx.coroutines.launch
 
 class HeroesActivity: AppCompatActivity() {
 
+    companion object { //funciones estaticas se declaran asi
+
+        private val TAG_TOKEN = "token"
+
+        fun runHeroesActivity(context: Context, token: String) { //el token del login es el que nos va a llevar a la siguiente pantalla
+            val intent = Intent(context, HeroesActivity::class.java) //intent lo gestiona android, le estas diciendo que desde context, quieres ir a HeroesActivity
+            intent.putExtra(TAG_TOKEN, token) //le pasamos el token
+            context.startActivity(intent) //y lo ejecutamos
+        }
+    }
+
     private val viewModel : HeroesViewModel by viewModels()
     private lateinit var binding : ActivityHeroesBinding
 
@@ -25,8 +38,17 @@ class HeroesActivity: AppCompatActivity() {
         binding = ActivityHeroesBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setObservers()
+
+        val image = ContextCompat.getDrawable(this, R.mipmap.fondo_heroes)
+        val token = intent.getStringExtra("token")
+        token?.let {
+            viewModel.updateToken(token)
+        } ?: run {
+            Toast.makeText(this, "Missing token", Toast.LENGTH_LONG).show()
+            finish()
+        }
+
         viewModel.getHeroes() //pillamos los heroes descargados desde el viewmodel
-        val imagen = ContextCompat.getDrawable(this, R.mipmap.fondo_heroes)
         binding.rvHeroes.setOnClickListener {
             //viewModel. //Aqui pasariamos a la vista detalle?
         }
