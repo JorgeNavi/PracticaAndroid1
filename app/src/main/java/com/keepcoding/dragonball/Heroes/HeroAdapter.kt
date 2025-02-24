@@ -3,6 +3,7 @@ package com.keepcoding.dragonball
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.keepcoding.dragonball.Domain.Hero
 import com.keepcoding.dragonball.databinding.ActivitySinglecharacterBinding
 
@@ -25,14 +26,13 @@ class HeroAdapter(
 
         fun bind(hero: Hero) {
             binding.tvName.text = hero.name
-            /*
             Glide
                 .with(binding.root) //en que activity se va a mostrar
                 .load(hero.photo)
                 .centerInside() //donde se va a colocar
                 .placeholder(R.drawable.ic_launcher_foreground) //que foto quieres poner si no se descarga correctamente
                 .into(binding.ivImage) //en que vista se va a mostrar
-            */
+
             binding.root.setOnClickListener {
                 onHeroClicked(hero)
             }
