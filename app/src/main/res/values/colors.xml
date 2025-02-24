@@ -12,5 +12,6 @@
     <color name="green">#6EC207</color>
     <color name="red">#C62E2E</color>
     <color name="gray">#A6AEBF</color>
+    <color name="redtrans">#44C62E2E</color>
 
 </resources>
