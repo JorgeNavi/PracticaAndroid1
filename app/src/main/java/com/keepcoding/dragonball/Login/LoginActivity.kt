@@ -1,4 +1,4 @@
-package com.keepcoding.dragonball.Login
+package com.keepcoding.dragonball.login
 
 import android.os.Bundle
 import android.view.View
@@ -8,69 +8,65 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
-import com.keepcoding.dragonball.Heroes.HeroesActivity
 import com.keepcoding.dragonball.R
 import com.keepcoding.dragonball.databinding.ActivityLoginBinding
+import com.keepcoding.dragonball.heroes.HeroesActivity
 import kotlinx.coroutines.launch
 
 class LoginActivity : AppCompatActivity() {
 
-    private val viewModel : LoginViewModel by viewModels() //hemos creado la clase loginViewModel y la instanciamos aqui
-    //Aqui ponemos el binding cuyo tipo equivale al activity_login.xml. Es como conectar este fichero con el xml correspondiente
-    private lateinit var binding : ActivityLoginBinding ///by viewBinding(ActivityLoginBinding::inflate) //para acceder a los elementos de la vista
-
+    private val viewModel : LoginViewModel by viewModels()
+    private lateinit var binding : ActivityLoginBinding ///by viewBinding(ActivityLoginBinding::inflate)
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState) //es lo primero que se ejecuta en el ciclo de vida de la activity (la pantalla)
-        enableEdgeToEdge()//se carga la barra de arriba de reloj, bateria, etc
-
-        binding = ActivityLoginBinding.inflate(layoutInflater) //el layoutInflater es una propiedad de la activity. coge el xml y genera la pantalla como tal
-        setContentView(binding.root) //Aqui se dice que se establece que el contenido de la vista es "la root del binding", es decir, el xml
-        setObservers() //vamos a establecer el metodo de suscribirse al publicador
+        super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
+        binding = ActivityLoginBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        setObservers()
         viewModel.guardarUsuario(
-            preferences = getSharedPreferences("LoginPreferences", MODE_PRIVATE), //instanciamos el sharedpreferencies como contexto donde se van a guardar
-            usuario = "pepe", //usuario a guardar
-            password = "1234" //password a guardar
+            preferences = getSharedPreferences("LoginPreferences", MODE_PRIVATE),
+            usuario = "pepe",
+            password = "1234"
         )
-        //los Toast son mensajes que se mandan al usuario de forma básica
-        Toast.makeText(this, "App abierta correctamente", Toast.LENGTH_LONG).show()//el contexto es esta activity, el texto que muestra: App abierta correctamente y el tiempo que dura.
-        val imagen = ContextCompat.getDrawable(this, R.mipmap.fondo_login) //esta es la forma de acceder a los recursos con el contexto de esta actividad y el recurso en si
+        Toast.makeText(this, "App abierta correctamente", Toast.LENGTH_LONG).show()
+        val imagen = ContextCompat.getDrawable(this, R.mipmap.fondo_login)
         // Es posible acceder uno a uno a las vistas de un layout así:
         // val boton = findViewById<MaterialButton>(R.id.bLogin)
-        binding.bLogin.setOnClickListener { //para acceder a los elementos de la vista, en este caso el boton del login. setOnClickListener es un listener de que ocurre cuando se clicka el login
+        binding.bLogin.setOnClickListener {
             viewModel.iniciarLogin(
-                usuario = binding.etUser.text.toString(), //etUser es como hemos llamado al edithText en el xml
-                password = binding.etPassword.text.toString() //se le pasa el valor de text a String por si cambia el tipo
+                usuario = binding.etUser.text.toString(),
+                password = binding.etPassword.text.toString()
             )
         }
     }
 
     private fun setObservers() {
         lifecycleScope.launch {
-            viewModel.uiState.collect { state -> //nos quedamos esuchando los estados
-                when(state){ //cuando el estado:
-                    is LoginViewModel.State.Idle -> {} //em espera: no hacemos nada
-                    is LoginViewModel.State.Loading -> { //si esta cargando
-                        binding.pbLoading.visibility = View.VISIBLE //mostramos el loading (el progressbar del xml)
+            viewModel.uiState.collect { state ->
+                when(state){
+                    is LoginViewModel.State.Idle -> {}
+                    is LoginViewModel.State.Loading -> {
+                        binding.pbLoading.visibility = View.VISIBLE
                     }
-                    is LoginViewModel.State.Success -> { //si esta en success:
-                        //pasamos a la siguiente pantalla con el metodo creado:
-                        runHeroesActivity(state.token)
-                        binding.pbLoading.visibility = View.INVISIBLE //escondemos el loading (el progressbar del xml)
-                        Toast.makeText(this@LoginActivity, "El token es. ${state.token}", Toast.LENGTH_LONG).show() //mostramos el token
-
+                    is LoginViewModel.State.Success -> {
+                        // TODO ir a la siguiente pantalla
+                        binding.pbLoading.visibility = View.INVISIBLE
+                        startHeroesActivity()
                     }
                     is LoginViewModel.State.Error -> {
                         binding.pbLoading.visibility = View.INVISIBLE
-                        Toast.makeText(this@LoginActivity, "Ha ocurrido un error. ${state.message} ${state.errorCode}", Toast.LENGTH_LONG).show() //mostramos el mensaje y el codigo del error que hemos establecido en el viewmodel
+                        Toast.makeText(this@LoginActivity, "Ha ocurrido un error. ${state.message} ${state.errorCode}", Toast.LENGTH_LONG).show()
                     }
                 }
-
             }
         }
     }
 
-    private fun runHeroesActivity(token: String) { //el token del login es el que nos va a llevar a la siguiente pantalla
-        HeroesActivity.runHeroesActivity(this, token) //intent lo gestiona android, le estas diciendo que desde context, quieres ir a HeroesActivity)
+
+    private fun startHeroesActivity() {
+        HeroesActivity.startHeroesActivity(this)
+        finish()
     }
+
 }

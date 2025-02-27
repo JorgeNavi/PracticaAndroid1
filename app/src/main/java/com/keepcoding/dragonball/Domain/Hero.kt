@@ -1,6 +1,6 @@
-package com.keepcoding.dragonball.Domain
+package com.keepcoding.dragonball.domain
 
-class Hero(val id: String, val name: String, val description: String, val photo: String, val currentHealth: Int = 100) {
+class Hero(val id: String, val name: String, val description: String, val photo: String, var currentHealth: Int, val totalHealth: Int = 100, var timesSelected: Int = 0) {
 }
 
 

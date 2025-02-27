@@ -8,21 +8,11 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
-    tools:context=".Heroes.HeroesActivity">
+    tools:context=".heroes.HeroesActivity">
 
-    <ProgressBar
-        android:id="@+id/pbLoading"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvHeroes"
+    <FrameLayout
+        android:id="@+id/flHome"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:itemCount="10"
-        tools:listitem="@layout/activity_singlecharacter"
-        />
+        android:layout_height="match_parent"/>
 
 </LinearLayout>

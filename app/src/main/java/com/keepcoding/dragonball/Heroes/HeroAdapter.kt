@@ -1,38 +1,39 @@
-package com.keepcoding.dragonball
+package com.keepcoding.dragonball.heroes
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.keepcoding.dragonball.Domain.Hero
-import com.keepcoding.dragonball.databinding.ActivitySinglecharacterBinding
+import com.keepcoding.dragonball.R
+import com.keepcoding.dragonball.databinding.ItemHeroBinding
+import com.keepcoding.dragonball.domain.Hero
 
 
 class HeroAdapter(
     private var onHeroClicked: (Hero) -> Unit,
 ): RecyclerView.Adapter<HeroAdapter.HeroViewHolder>() {
 
-    private var heroes = listOf<Hero>()
+    private var heroesList = listOf<Hero>()
 
     fun updateHeroes(heroes: List<Hero>) {
-        this.heroes = heroes
-        notifyDataSetChanged() //enviamos que se ha actualizado la lista
+        this.heroesList = heroes
+        notifyDataSetChanged()
     }
 
     class HeroViewHolder(
-        private val binding: ActivitySinglecharacterBinding,
+        private val binding: ItemHeroBinding,
         private var onHeroClicked: (Hero) -> Unit,
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(hero: Hero) {
             binding.tvName.text = hero.name
             Glide
-                .with(binding.root) //en que activity se va a mostrar
+                .with(binding.root)
                 .load(hero.photo)
-                .centerInside() //donde se va a colocar
-                .placeholder(R.drawable.ic_launcher_foreground) //que foto quieres poner si no se descarga correctamente
-                .into(binding.ivImage) //en que vista se va a mostrar
-
+                .centerInside()
+                .placeholder(R.drawable.ic_launcher_foreground)
+                .into(binding.ivPhoto)
+            binding.tvHealth.text = "${hero.currentHealth} / ${hero.totalHealth}"
             binding.root.setOnClickListener {
                 onHeroClicked(hero)
             }
@@ -40,20 +41,19 @@ class HeroAdapter(
 
     }
 
-
-    override fun getItemCount(): Int {
-        return heroes.size //el tamaño de la lista es el tamaño de los personajes
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HeroViewHolder { //este metodo devuelve viewHolder (cada una de las casillas de la lista
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HeroViewHolder {
         return HeroViewHolder(
-            binding = ActivitySinglecharacterBinding.inflate(LayoutInflater.from(parent.context), parent, false),
+            binding = ItemHeroBinding.inflate(LayoutInflater.from(parent.context), parent, false),
             onHeroClicked = onHeroClicked,
         )
     }
 
-    override fun onBindViewHolder(holder: HeroViewHolder, position: Int) { //nos llega la vista (el viewHolder creado, y la posicion
-        holder.bind(heroes[position]) //es como decirle "al elemento posicion 1, los vas a rellenar con el hero 1" mas o menos
+    override fun getItemCount(): Int {
+        return heroesList.size
+    }
+
+    override fun onBindViewHolder(holder: HeroViewHolder, position: Int) {
+        holder.bind(heroesList[position])
     }
 
 
