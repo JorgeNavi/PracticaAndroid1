@@ -34,6 +34,14 @@ class HeroAdapter(
                 .placeholder(R.drawable.ic_launcher_foreground)
                 .into(binding.ivPhoto)
             binding.tvHealth.text = "${hero.currentHealth} / ${hero.totalHealth}"
+            if (hero.currentHealth == 0) {
+                binding.root.isClickable = false
+                binding.root.alpha = 0.5f
+
+            } else {
+                binding.root.isClickable = true
+                binding.root.alpha = 1.0f
+            }
             binding.root.setOnClickListener {
                 onHeroClicked(hero)
             }
@@ -55,6 +63,4 @@ class HeroAdapter(
     override fun onBindViewHolder(holder: HeroViewHolder, position: Int) {
         holder.bind(heroesList[position])
     }
-
-
 }

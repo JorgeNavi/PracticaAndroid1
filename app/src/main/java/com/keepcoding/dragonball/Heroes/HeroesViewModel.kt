@@ -12,6 +12,7 @@ import com.keepcoding.dragonball.repositories.UserRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.jetbrains.annotations.VisibleForTesting
+import kotlin.random.Random
 
 class HeroesViewModel: ViewModel() {
 
@@ -29,8 +30,12 @@ class HeroesViewModel: ViewModel() {
 
     val uiState: StateFlow<State> = _uiState.asStateFlow()
 
-    fun damagehero(hero: Hero) {
-        hero.currentHealth -= 10
+    fun damageHero(hero: Hero) {
+        hero.currentHealth -= Random.nextInt(10, 60).coerceAtLeast(0)
+    }
+
+    fun healHero(hero: Hero) {
+        hero.currentHealth += (20).coerceAtMost(100)
     }
 
     fun selectHero(hero: Hero) {

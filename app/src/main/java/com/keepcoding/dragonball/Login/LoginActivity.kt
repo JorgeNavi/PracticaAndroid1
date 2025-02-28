@@ -24,19 +24,17 @@ class LoginActivity : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setObservers()
-        viewModel.guardarUsuario(
-            preferences = getSharedPreferences("LoginPreferences", MODE_PRIVATE),
-            usuario = "pepe",
-            password = "1234"
-        )
-        Toast.makeText(this, "App abierta correctamente", Toast.LENGTH_LONG).show()
+
         val imagen = ContextCompat.getDrawable(this, R.mipmap.fondo_login)
         // Es posible acceder uno a uno a las vistas de un layout así:
         // val boton = findViewById<MaterialButton>(R.id.bLogin)
         binding.bLogin.setOnClickListener {
+            val rememberMe = binding.cbRememberUser.isChecked
             viewModel.iniciarLogin(
                 usuario = binding.etUser.text.toString(),
-                password = binding.etPassword.text.toString()
+                password = binding.etPassword.text.toString(),
+                rememberMe = rememberMe,
+                preferences = getSharedPreferences("LoginPreferences", MODE_PRIVATE)
             )
         }
     }
@@ -50,7 +48,6 @@ class LoginActivity : AppCompatActivity() {
                         binding.pbLoading.visibility = View.VISIBLE
                     }
                     is LoginViewModel.State.Success -> {
-                        // TODO ir a la siguiente pantalla
                         binding.pbLoading.visibility = View.INVISIBLE
                         startHeroesActivity()
                     }

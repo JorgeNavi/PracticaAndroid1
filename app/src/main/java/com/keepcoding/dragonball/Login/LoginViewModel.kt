@@ -25,13 +25,20 @@ class LoginViewModel: ViewModel() {
     }
 
 
-    fun iniciarLogin(usuario: String, password: String) {
+    fun iniciarLogin(usuario: String, password: String, rememberMe: Boolean, preferences: SharedPreferences?) {
         viewModelScope.launch(Dispatchers.IO) {
             _uiState.value = State.Loading
-            delay(2000L)
             val loginResponse = userRepository.login(usuario, password)
             when (loginResponse) {
                 is UserRepository.LoginResponse.Success -> {
+                    preferences?.edit()?.apply {
+                        putString("token", loginResponse.token)
+                        if (rememberMe) {
+                            putString("usuario", usuario)
+                            putString("password", password)
+                        }
+                        apply()
+                    }
                     _uiState.value = State.Success
                 }
                 is UserRepository.LoginResponse.Error -> {
@@ -41,16 +48,6 @@ class LoginViewModel: ViewModel() {
         }
     }
 
-    fun guardarUsuario(preferences: SharedPreferences?, usuario: String, password: String) {
-        viewModelScope.launch(Dispatchers.IO) {
-            delay(1000L)
-            preferences?.edit()?.apply {
-                putString("Usuario", usuario)
-                putString("Pasword", password)
-                apply()
-            }
-        }
-    }
 
     // TODO mejoras.
     //  Si el usuario ya ha hecho login, entonces no volverselo a pedir
