@@ -9,6 +9,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import com.keepcoding.dragonball.databinding.FragmentDetailBinding
 import com.keepcoding.dragonball.domain.Hero
+import com.keepcoding.dragonball.heroes.HeroesOptions
 import com.keepcoding.dragonball.heroes.HeroesViewModel
 
 import kotlinx.coroutines.Job
@@ -35,11 +36,11 @@ class DetailFragment: Fragment() {
             tvName.text = hero.name
             pbHealth.progress = hero.currentHealth
             bHit.setOnClickListener {
-                viewModel.damagehero(hero) // TODO falta ue el golpe quite 20 puntos
+                viewModel.damageHero(hero)
                 pbHealth.progress = hero.currentHealth
             }
             bHeal.setOnClickListener {
-                hero.currentHealth = hero.currentHealth // TODO falta curar 60 puntos
+                viewModel.healHero(hero)
                 pbHealth.progress = hero.currentHealth
             }
         }
@@ -51,6 +52,9 @@ class DetailFragment: Fragment() {
                 when(state){
                     is HeroesViewModel.State.HeroSelected -> {
                         initViews(state.hero)
+                        if (state.hero.currentHealth == 0) {
+                            (activity as? HeroesOptions)?.goToHeroes()
+                        }
                     }
                     else -> Unit
                 }

@@ -22,12 +22,12 @@ class HeroesRepository {
         if (heroesList.isNotEmpty())
             return HeroesResponse.Success(heroesList)
 
-        // Este es un ejemplo de como guardar en las shared preferences toda la lista de personajes. Falta que se actualice cuando reciban golpes
+        // Este es un ejemplo de como guardar en las shared preferences toda la lista de personajes. Falta que se actualice cuando reciban golpes, se puede implentar esto cuando reciban daño o se curen
         sharedPreferences?.let {
-            val listaPersonajesJson = it.getString("listaPersonajes", "")
-            val personajes: Array<Hero>? =
-                Gson().fromJson(listaPersonajesJson, Array<Hero>::class.java)
-            if(!personajes.isNullOrEmpty()) return HeroesResponse.Success(personajes.toList())
+            val heroesListJson = it.getString("heroesList", "")
+            val heroes: Array<Hero>? =
+                Gson().fromJson(heroesListJson, Array<Hero>::class.java)
+            if(!heroes.isNullOrEmpty()) return HeroesResponse.Success(heroes.toList())
         }
         // TODO para completar el vecesSeleccionado.
         //  tendremos que guardar en las sharedPreferences la lista de personajes con todos sus datos.
@@ -67,7 +67,7 @@ class HeroesRepository {
                 )
             }
             sharedPreferences?.edit()?.apply {
-                putString("listaPersonajes", Gson().toJson(heroesList))
+                putString("heroesList", Gson().toJson(heroesList))
                 apply()
             }
             HeroesResponse.Success(heroesList)
