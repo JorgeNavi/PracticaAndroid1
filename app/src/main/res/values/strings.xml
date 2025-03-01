@@ -6,5 +6,6 @@
     <string name="login">login</string>
     <string name="remember_user">remember me</string>
     <string name="hit">Hit it!!</string>
-    <string name="heal">Healit!!</string>
+    <string name="heal">heal it!!</string>
+
 </resources>

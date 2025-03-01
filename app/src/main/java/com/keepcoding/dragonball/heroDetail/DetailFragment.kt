@@ -51,6 +51,9 @@ class DetailFragment: Fragment() {
             bHit.setOnClickListener {
                 viewModel.damageHero(hero, preferences)
                 pbHealth.progress = hero.currentHealth
+                if (hero.currentHealth == 0) {
+                    (activity as? HeroesOptions)?.goToHeroes()
+                }
             }
             bHeal.setOnClickListener {
                 viewModel.healHero(hero, preferences)

@@ -33,7 +33,7 @@ class HeroAdapter(
                 .centerInside()
                 .placeholder(R.drawable.ic_launcher_foreground)
                 .into(binding.ivPhoto)
-            binding.tvHealth.text = "${hero.currentHealth} / ${hero.totalHealth}"
+            binding.pbHealth.progress = hero.currentHealth
             if (hero.currentHealth == 0) {
                 binding.root.isClickable = false
                 binding.root.alpha = 0.5f

@@ -6,24 +6,29 @@
     android:layout_height="match_parent"
     tools:context=".login.LoginActivity"
     android:gravity="center_horizontal"
-    android:background="@mipmap/fondo_login"
+    android:background="@mipmap/fondo_detail"
     android:orientation="vertical">
 
-    <TextView
+    <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@mipmap/linear_title"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
         android:text="@string/dragonball_app"
-        android:layout_margin="24dp"/>
+        android:layout_marginTop="100dp"
+        />
 
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="30dp"
         android:layout_height="wrap_content">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:background="@color/orangetrans">
+            android:background="@color/lightBlue">
             <EditText
                 android:id="@+id/etUser"
                 android:layout_width="match_parent"
