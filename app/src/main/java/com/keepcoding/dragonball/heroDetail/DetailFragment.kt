@@ -9,6 +9,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
+import com.bumptech.glide.Glide
+import com.keepcoding.dragonball.R
 import com.keepcoding.dragonball.databinding.FragmentDetailBinding
 import com.keepcoding.dragonball.domain.Hero
 import com.keepcoding.dragonball.heroes.HeroesOptions
@@ -38,6 +40,13 @@ class DetailFragment: Fragment() {
     private fun initViews(hero: Hero) {
         with(binding) {
             tvName.text = hero.name
+            tvCounter.text = hero.timesSelected.toString()
+            Glide
+                .with(binding.root)
+                .load(hero.photo)
+                .centerInside()
+                .placeholder(R.drawable.ic_launcher_foreground)
+                .into(binding.ivHeroPhoto)
             pbHealth.progress = hero.currentHealth
             bHit.setOnClickListener {
                 viewModel.damageHero(hero, preferences)

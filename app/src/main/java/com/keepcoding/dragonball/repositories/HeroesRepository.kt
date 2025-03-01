@@ -33,10 +33,6 @@ class HeroesRepository {
                 }
             }
         }
-        // TODO para completar el vecesSeleccionado.
-        //  tendremos que guardar en las sharedPreferences la lista de personajes con todos sus datos.
-        //  antes de llamar a internet, comprobar en las sharedPreferences. Si no hay nada, vamos a internet.
-        //  si tenemos datos previos, lo cargamos de las preferencias
 
         val client = OkHttpClient()
         val url = "${BASE_URL}heros/all"
