@@ -1,6 +1,7 @@
 package com.keepcoding.dragonball.repositories
 
 import android.util.Log
+import okhttp3.Credentials
 import okhttp3.FormBody
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -19,6 +20,7 @@ class UserRepository {
     fun login(user: String, password: String): LoginResponse {
         val client = OkHttpClient()
         val url = BASE_URL
+        val credentials = Credentials.basic(user, password)
 
         val formBody = FormBody.Builder()
             .add("username", user)
@@ -27,6 +29,7 @@ class UserRepository {
 
         val request = Request.Builder()
             .url(url)
+            .addHeader("Authorization", credentials)
             .post(formBody)
             .build()
 

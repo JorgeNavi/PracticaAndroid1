@@ -1,5 +1,7 @@
 package com.keepcoding.dragonball.heroDetail
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -20,12 +22,14 @@ class DetailFragment: Fragment() {
     private lateinit var binding: FragmentDetailBinding
     private val viewModel: HeroesViewModel by activityViewModels()
     private var job: Job? = null
+    private lateinit var preferences: SharedPreferences
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        preferences = requireContext().getSharedPreferences("LoginPreferences", Context.MODE_PRIVATE)
         binding = FragmentDetailBinding.inflate(inflater, container, false)
         initObservers()
         return binding.root
@@ -36,11 +40,11 @@ class DetailFragment: Fragment() {
             tvName.text = hero.name
             pbHealth.progress = hero.currentHealth
             bHit.setOnClickListener {
-                viewModel.damageHero(hero)
+                viewModel.damageHero(hero, preferences)
                 pbHealth.progress = hero.currentHealth
             }
             bHeal.setOnClickListener {
-                viewModel.healHero(hero)
+                viewModel.healHero(hero, preferences)
                 pbHealth.progress = hero.currentHealth
             }
         }
