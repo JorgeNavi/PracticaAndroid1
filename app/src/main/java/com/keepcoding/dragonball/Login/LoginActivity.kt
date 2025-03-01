@@ -20,6 +20,16 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // Verificamos si ya existe un usuario guardado en SharedPreferences
+        val prefs = getSharedPreferences("LoginPreferences", MODE_PRIVATE)
+        val user = prefs.getString("usuario", null)
+
+        if (!user.isNullOrEmpty()) {
+            // Si ya hay usuario, redirigimos directamente a la actividad principal
+            HeroesActivity.startHeroesActivity(this)
+            finish()
+            return // Salimos de onCreate para no seguir con el login
+        }
         enableEdgeToEdge()
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -34,7 +44,7 @@ class LoginActivity : AppCompatActivity() {
                 usuario = binding.etUser.text.toString(),
                 password = binding.etPassword.text.toString(),
                 rememberMe = rememberMe,
-                preferences = getSharedPreferences("LoginPreferences", MODE_PRIVATE)
+                preferences = prefs
             )
         }
     }

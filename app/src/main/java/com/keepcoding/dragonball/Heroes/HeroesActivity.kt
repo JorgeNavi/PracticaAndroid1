@@ -34,7 +34,7 @@ class HeroesActivity: AppCompatActivity(), HeroesOptions {
         binding = ActivityHeroesBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        viewModel.getHeroes(getSharedPreferences("my_preferences", Context.MODE_PRIVATE))
+        viewModel.getHeroes(getSharedPreferences("LoginPreferences", Context.MODE_PRIVATE))
         initFragments()
     }
 

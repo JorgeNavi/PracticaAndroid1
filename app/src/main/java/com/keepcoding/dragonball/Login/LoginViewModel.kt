@@ -47,9 +47,4 @@ class LoginViewModel: ViewModel() {
             }
         }
     }
-
-
-    // TODO mejoras.
-    //  Si el usuario ya ha hecho login, entonces no volverselo a pedir
-    //  Si el usuario le ha dado a recordar usuario y contraseña. Después mostrarlo
 }

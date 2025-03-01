@@ -1,5 +1,7 @@
 package com.keepcoding.dragonball.heroes
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -17,12 +19,13 @@ class HeroesFragment: Fragment() {
 
     private val heroAdapter = HeroAdapter(
         onHeroClicked = { hero ->
-            viewModel.selectHero(hero)
+            viewModel.selectHero(hero, preferences)
         }
     )
     private val viewModel: HeroesViewModel by activityViewModels()
 
     private lateinit var binding: FragmentHeroesBinding
+    private lateinit var preferences: SharedPreferences
     private var job: Job? = null
 
     override fun onCreateView(
@@ -30,6 +33,7 @@ class HeroesFragment: Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        preferences = requireContext().getSharedPreferences("LoginPreferences", Context.MODE_PRIVATE)
         binding = FragmentHeroesBinding.inflate(inflater, container, false)
         initViews()
         initObservers()

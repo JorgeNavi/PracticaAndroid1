@@ -30,21 +30,26 @@ class HeroesViewModel: ViewModel() {
 
     val uiState: StateFlow<State> = _uiState.asStateFlow()
 
-    fun damageHero(hero: Hero) {
-        hero.currentHealth -= Random.nextInt(10, 60).coerceAtLeast(0)
+    fun damageHero(hero: Hero, preferences: SharedPreferences) {
+        val damage = Random.nextInt(10, 60)
+        hero.currentHealth = (hero.currentHealth - damage).coerceAtLeast(0)
+        heroesRepository.updateHeroesInPreferences(preferences)
     }
 
-    fun healHero(hero: Hero) {
-        hero.currentHealth += (20).coerceAtMost(100)
+    fun healHero(hero: Hero, preferences: SharedPreferences) {
+        val heal = 20
+       hero.currentHealth = (hero.currentHealth + 20).coerceAtMost(100)
+        heroesRepository.updateHeroesInPreferences(preferences)
     }
 
-    fun selectHero(hero: Hero) {
+    fun selectHero(hero: Hero, preferences: SharedPreferences) {
         hero.timesSelected++
         _uiState.value = State.HeroSelected(hero)
+        heroesRepository.updateHeroesInPreferences(preferences)
     }
 
     fun unselectHero() {
-        val result = heroesRepository.fetchHeroes(userRepository.getToken(),)
+        val result = heroesRepository.fetchHeroes(userRepository.getToken())
         when (result) {
             is HeroesRepository.HeroesResponse.Success -> {
                 _uiState.value = State.Success(result.heroes)
@@ -59,7 +64,8 @@ class HeroesViewModel: ViewModel() {
     fun getHeroes(sharedPreferences: SharedPreferences) {
         viewModelScope.launch(Dispatchers.IO) {
             _uiState.value = State.Loading
-            val result = heroesRepository.fetchHeroes(userRepository.getToken(), sharedPreferences)
+            val token = sharedPreferences.getString("token", "") ?: "" //recibimos el token directamente desde sharedPreferences
+            val result = heroesRepository.fetchHeroes(token, sharedPreferences)
             when (result) {
                 is HeroesRepository.HeroesResponse.Success -> {
                     _uiState.value = State.Success(result.heroes)
