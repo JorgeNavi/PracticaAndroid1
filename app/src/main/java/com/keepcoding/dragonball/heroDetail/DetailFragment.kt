@@ -31,7 +31,8 @@ class DetailFragment: Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        preferences = requireContext().getSharedPreferences("LoginPreferences", Context.MODE_PRIVATE)
+        preferences =
+            requireContext().getSharedPreferences("LoginPreferences", Context.MODE_PRIVATE)
         binding = FragmentDetailBinding.inflate(inflater, container, false)
         initObservers()
         return binding.root
@@ -63,15 +64,16 @@ class DetailFragment: Fragment() {
     }
 
     private fun initObservers() {
-       job = lifecycleScope.launch {
-            viewModel.uiState.collect{ state ->
-                when(state){
+        job = lifecycleScope.launch {
+            viewModel.uiState.collect { state ->
+                when (state) {
                     is HeroesViewModel.State.HeroSelected -> {
                         initViews(state.hero)
                         if (state.hero.currentHealth == 0) {
                             (activity as? HeroesOptions)?.goToHeroes()
                         }
                     }
+
                     else -> Unit
                 }
             }
@@ -81,6 +83,8 @@ class DetailFragment: Fragment() {
     override fun onStop() {
         super.onStop()
         job?.cancel()
-        viewModel.unselectHero()
+        if (isRemoving || requireActivity().isFinishing) {
+            viewModel.unselectHero()
+        }
     }
 }
