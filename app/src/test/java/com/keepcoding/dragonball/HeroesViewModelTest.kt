@@ -42,18 +42,32 @@ class HeroesViewModelTest {
         timesSelected = 0,
     )
 
+
     @After
     fun tearDown() {
         Dispatchers.resetMain()
     }
 
     @Test
-    fun `golpearPersonaje baja la vida del personaje`() {
-        val heroExpected = initialHero.copy(
-            currentHealth = 90
-        )
+    fun `hit heroes actually takes healthPoints`() {
         viewModel.damageHero(initialHero, preference)
-        assertEquals(heroExpected, initialHero)
+        assertEquals(initialHero.currentHealth < 100, true)
+    }
+
+    @Test
+    fun `heal heroes actually add healthPoints`() {
+        //golpeamos al hero, hace entre 10 y 60 de daño
+        viewModel.damageHero(initialHero, preference)
+
+        //como las curaciones regeneran 20 ptos de vida, usamos 3 curaciones para asegurarnos que curaría la vida
+        //al completo en caso de que se hubieran hecho 60 de daño
+        //como solo se puede curar hastaun maximo de 100, si el daño fuera más bajo de 60 no influye
+        viewModel.healHero(initialHero, preference)
+        viewModel.healHero(initialHero, preference)
+        viewModel.healHero(initialHero, preference)
+
+        //Comprobamos que la vida se haya regenerado
+        assertEquals(initialHero.currentHealth == 100, true)
     }
 
     @Test
@@ -64,6 +78,12 @@ class HeroesViewModelTest {
             assertEquals(HeroesViewModel.State.HeroSelected(initialHero), awaitItem())
             cancelAndIgnoreRemainingEvents()
         }
+    }
+
+    @Test
+    fun `when hero is selected, timesSelected increments`() {
+        viewModel.selectHero(initialHero, preference)
+        assertEquals(1, initialHero.timesSelected)
     }
 
     @Test
@@ -78,8 +98,14 @@ class HeroesViewModelTest {
     }
 
     @Test
-    fun simpleTest() {
-        assertTrue(true)
+    fun `when fetching heroes, the state is updated to Success`() = runTest {
+        viewModel.uiState.test {
+            viewModel.userRepository.setToken("eyJraWQiOiJwcml2YXRlIiwidHlwIjoiSldUIiwiYWxnIjoiSFMyNTYifQ.eyJleHBpcmF0aW9uIjo2NDA5MjIxMTIwMCwiZW1haWwiOiJjZHRsQHBydWVibWFpbC5lcyIsImlkZW50aWZ5IjoiRDIwRTAwQTktODY0NC00MUYyLUE0OUYtN0ZDRUY2MTVFMTQ3In0.wMqJfh5qcs5tU6hu2VxT4OV9Svd7BGBA7HsVpKhx5-8")
+            assertEquals(HeroesViewModel.State.Loading, awaitItem())
+            viewModel.heroesRepository.fetchHeroes("eyJraWQiOiJwcml2YXRlIiwidHlwIjoiSldUIiwiYWxnIjoiSFMyNTYifQ.eyJleHBpcmF0aW9uIjo2NDA5MjIxMTIwMCwiZW1haWwiOiJjZHRsQHBydWVibWFpbC5lcyIsImlkZW50aWZ5IjoiRDIwRTAwQTktODY0NC00MUYyLUE0OUYtN0ZDRUY2MTVFMTQ3In0.wMqJfh5qcs5tU6hu2VxT4OV9Svd7BGBA7HsVpKhx5-8", preference)
+            viewModel.getHeroes(preference)
+            assertTrue(awaitItem() is HeroesViewModel.State.Success)
+            cancelAndIgnoreRemainingEvents()
+        }
     }
-
 }
