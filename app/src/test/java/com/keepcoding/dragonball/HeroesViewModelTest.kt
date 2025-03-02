@@ -1,7 +1,6 @@
 package com.keepcoding.dragonball
 
 import android.content.SharedPreferences
-import androidx.appcompat.app.AppCompatActivity.MODE_PRIVATE
 import app.cash.turbine.test
 import com.keepcoding.dragonball.domain.Hero
 import com.keepcoding.dragonball.heroes.HeroesViewModel
@@ -16,6 +15,7 @@ import org.junit.Test
 
 import org.junit.Assert.*
 import org.junit.Before
+import org.mockito.Mockito.mock
 
 
 class HeroesViewModelTest {
@@ -23,6 +23,7 @@ class HeroesViewModelTest {
     private val testDispatcher = StandardTestDispatcher()
 
     private val viewModel = HeroesViewModel()
+    private val preference: SharedPreferences = mock()
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Before
@@ -51,7 +52,7 @@ class HeroesViewModelTest {
         val heroExpected = initialHero.copy(
             currentHealth = 90
         )
-        viewModel.damageHero(initialHero)
+        viewModel.damageHero(initialHero, preference)
         assertEquals(heroExpected, initialHero)
     }
 
@@ -59,7 +60,7 @@ class HeroesViewModelTest {
     fun `cuando se selecciona un personaje, el state se actualiza a PersonajeSelecciado con ese personaje`() = runTest {
         viewModel.uiState.test {
             assertEquals(HeroesViewModel.State.Loading, awaitItem())
-            viewModel.selectHero(initialHero)
+            viewModel.selectHero(initialHero, preference)
             assertEquals(HeroesViewModel.State.HeroSelected(initialHero), awaitItem())
             cancelAndIgnoreRemainingEvents()
         }
@@ -74,6 +75,11 @@ class HeroesViewModelTest {
             assertTrue(awaitItem() is HeroesViewModel.State.Success)
             cancelAndIgnoreRemainingEvents()
         }
+    }
+
+    @Test
+    fun simpleTest() {
+        assertTrue(true)
     }
 
 }
